@@ -1,0 +1,89 @@
+---
+title: "Bonanza Creek Snowshoe Hairs Mini Report"
+author: "Jaxon Stuhr"
+date: "11/5/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+library(tidyverse)
+library(janitor)
+library(here)
+library(kableExtra)
+library(lubridate)
+```
+
+```{r}
+# read in data
+bonanza_hares_raw = read_csv(here("data", "bonanza_hares.csv"))
+```
+
+
+## Introduction
+
+## Data and Analyses
+
+## Juvenile Hare Initial Investigation
+
+### Annual juvenile hare trap counts
+```{r}
+# build working dataset
+juv_bonanza_hares = bonanza_hares_raw %>% 
+  # filter for juveniles
+  filter(age == "j") %>% 
+  # lubridate date
+  mutate(date = mdy(date)) %>% 
+  # add yr column
+  mutate(year = year(date))
+```
+```{r}
+# ggplot w x = year
+ggplot(juv_bonanza_hares, aes(x = year)) + 
+  # hist w 14 bins
+  geom_histogram(binwidth = 1, fill = "Dark Green") + 
+  # build x axis labels
+  scale_x_continuous(
+    name="Year", 
+    limits=c(1998, 2013), 
+    breaks=c(1999,2001, 2003, 2005, 2007, 2009, 2011)) +
+  # add theme
+  theme_linedraw() +
+  # add labels
+  labs(x = "Year", 
+       y = "Juvenile Hair Trap Counts", 
+       title = "Juvenile Hair Trap Counts by Year") +
+  # center title
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+Fig 1: Juvenile Hair Trap Counts at Bonanza Creek Experimental Yeared for Yesars 1999 - 2012
+```{r}
+# summary stats for analyses
+juv_trap_counts_summary = juv_bonanza_hares %>% 
+  # group by yr
+  group_by(year) %>% 
+  # count
+  summarize(
+    count = n()
+  )
+# mean, median, max, min juvenile traps for 1999 - 2012
+mean_traps = mean(juv_trap_counts_summary$count)
+median_traps = median(juv_trap_counts_summary$count)
+max_traps = max(juv_trap_counts_summary$count)
+min_traps = min(juv_trap_counts_summary$count)
+```
+#### Analyses:
+
+(((add this)))
+
+### Visualize juvenile hare weights
+
+### Juvenile weight comparison (male & female snowshoe hares)
+
+### Relationship between juvenile weight & hind foot length
+
+## Summary
+
+## References
+
