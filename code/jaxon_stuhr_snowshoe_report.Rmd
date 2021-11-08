@@ -58,13 +58,13 @@ ggplot(juv_bonanza_hares, aes(x = year)) +
   theme_linedraw() +
   # add labels
   labs(x = "Year", 
-       y = "Juvenile Hare Trap Counts", 
-       title = "Juvenile Hare Trap Counts by Year") +
+       y = "Juvenile Hare Trap Counts")   
+      # title = "Juvenile Hare Trap Counts by Year") +
   # center title
-  theme(plot.title = element_text(hjust = 0.5))
+  #theme(plot.title = element_text(hjust = 0.5))
 ```
 
-Fig 1: Juvenile Hare Trap Counts at Bonanza Creek Experimental Forest for Years 1999 - 2012
+Fig 1: Juvenile hare trap counts at Bonanza Creek Experimental Forest for years 1999 - 2012
 ```{r}
 # summary stats for analyses
 juv_trap_counts_summary = juv_bonanza_hares %>% 
@@ -95,17 +95,17 @@ ggplot(juv_bonanza_hares, aes(x = sex, y = weight, color = sex)) +
   facet_wrap(~ full_site) +
   # add labels
   labs(x = "Sex", 
-       y = "Weight [grams]", 
-       title = "Juvenile Hare Weights at Bonanza Trapping Locations") +
+       y = "Weight [grams]")+ 
+       #title = "Juvenile Hare Weights at Bonanza Trapping Locations") +
   # rename x-axis labels
   scale_x_discrete(labels = c("Female","Male","NA")) + 
   # remove legend
-  guides(color = FALSE) +
+  guides(color = FALSE) 
   # center title
-  theme(plot.title = element_text(hjust = 0.5))
+  #theme(plot.title = element_text(hjust = 0.5))
 ```
 
-Fig 2: Juvenile Hare Weights [g] at Three Bonanza Sites Sorted by Site and Sex for Hares Trapped between 1999 and 2012
+Fig 2: Juvenile hare weights [g] at three Bonanza sites sorted by site and sex for hares trapped between 1999 and 2012
 ```{r}
 # summary stats for analyses
 juv_weights_sex_site = juv_bonanza_hares %>% 
@@ -159,8 +159,21 @@ ggplot(female_weights, aes(x = weight)) +
   geom_histogram(bins = 10)
 ```
 
+#### Analyses
+
+(((add analyses and Cohens D calculation)))
 
 ### Relationship between juvenile weight & hind foot length
+
+```{r}
+ggplot(juv_bonanza_hares, aes(x = hindft, y = weight, color = sex)) +
+  geom_point() + 
+  theme_light() + 
+  labs(x = "Hind foot length [mm]", y = "Weight [g]") + 
+  scale_color_manual(labels = c("Female", "Male", "NA"), values = c("red", "dark blue"))
+```
+
+Fig 3: Juvenile Hare Weights [g] as a function of hind foot length [mm] at three Bonanza sites hares trapped between 1999 and 2012
 
 ## Summary
 
