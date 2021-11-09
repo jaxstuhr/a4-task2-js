@@ -1,14 +1,13 @@
 ---
 title: "Bonanza Creek Snowshoe Hairs Mini Report"
 author: "Jaxon Stuhr"
-date: "11/5/2021"
+date: "11/9/2021"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 library(tidyverse)
-library(janitor)
 library(here)
 library(kableExtra)
 library(lubridate)
@@ -25,7 +24,11 @@ bonanza_hares_raw = read_csv(here("data", "bonanza_hares.csv"))
 
 ## Introduction
 
+This report explores juvenile snowshoe hare populations in the Bonanza Creek Experimental Forest in Alaska from 1999 to 2012. Hare weights are analyzed along with relationship to sex, observed site, and hind foot length. Observed sites include "Bonanza Riparian", "Bonanaza Mature", and "Bonanza Black Spruce", about which additional metadata can be found in Kielland et al. 
+
 ## Data and Analyses
+
+Snowshoe hare trap counts and measurements were provided by Kielland et al., working at the Bonanza Creek Long Term Ecological Research (LTER) site in Alaska. Included are data on over 3000 hare trappings, however this report examines only the 378 of those that were juveniles. The data was collected from the three sites referenced above over the years 1999 - 2012. This report includes visualizations of total trap counts by year (Fig 1), analysis of the relationship between trapping site, hare size, and hare weight (Fig 2, Table 1), and an examination of the relationship between hind foot length and weight (Fig 3). Statistical methods including an unpaired t-test, a Cohen's *d* effect size calculation, and a linear regression were performed to best assess and understand relationships.
 
 ## Juvenile Hare Initial Investigation
 
@@ -229,9 +232,46 @@ Fig 3: Juvenile hare weights [g] as a function of hind foot length [mm] at three
 
 #### Analysis
 
-The fitted linear regression model states that for every 1mm increase in hind foot length, the hares' weight increase by `r round(hare_lm$coefficients[2],1)` grams. The fitted line had an R^2^ = `r round(hare_lm_out[2],2)` meaning only `r 100*round(hare_lm_out[2],2)`% of the variance in weight could be explained by changes in hind foot length. From a Pearson's *r* value of `r round(hares_cor$estimate,2)` we see that the variables (hind foot length and weight) are moderately correlated. The assumption of homoscedasticity, which is required for linear regression, appears to not apply as we can see in the scatter plot that variance in weight increases as hind foot length gets bigger. 
+The fitted linear regression model states that for every 1mm increase in hind foot length, the hares' weight increase by `r round(hare_lm$coefficients[2],1)` grams. The fitted line had an R^2^ = `r round(hare_lm_out[2],2)` meaning only `r 100*round(hare_lm_out[2],2)`% of the variance in weight could be explained by changes in hind foot length. From a Pearson's *r* value of `r round(hares_cor$estimate,2)` we see that the variables (hind foot length and weight) are moderately correlated. The assumption of homoscedasticity, which is required for linear regression, appears to not apply as we can see in the scatter plot that variance in weight increases as hind foot length gets bigger.
 
 ## Summary
 
+Primary findings from juvenile hares exploration:
+
+* far more juvenile hares (>150) were observed in 1999 than any other year studied, with no juvenile hares observed in 2002 and 2009
+
+* while male hares did on average weigh more than females, the difference was only 10%, and there was not significant weight variation by observation site
+
+* hind foot length was correlated with hare weight, and a linear regression found that for a 1mm increase in hind foot length, the hares' weight increase by `r round(hare_lm$coefficients[2],1)` grams, however, hind foot length explained only `r 100*round(hare_lm_out[2],2)`% of the variation in weight
+
 ## References
+
+Kielland, K., F.S. Chapin, R.W. Ruess, and Bonanza Creek LTER. 2017. Snowshoe hare physical data in Bonanza Creek Experimental Forest: 1999-Present ver 22. Environmental Data Initiative. https://doi.org/10.6073/pasta/03dce4856d79b91557d8e6ce2cbcdc14
+
+Wickham et al., (2019). Welcome to the
+tidyverse. Journal of Open Source Software,
+4(43), 1686,
+https://doi.org/10.21105/joss.01686
+  
+Kirill Müller (2020). here: A Simpler Way to Find Your Files. R
+package version 1.0.1. https://CRAN.R-project.org/package=here
+  
+Torchiano M (2020). _effsize: Efficient Effect Size Computation_. doi:
+10.5281/zenodo.1480624 (URL: https://doi.org/10.5281/zenodo.1480624), R
+package version 0.8.1, <URL:
+https://CRAN.R-project.org/package=effsize>.
+
+Hao Zhu (2021). kableExtra: Construct Complex Table with 'kable' and
+Pipe Syntax. R package version 1.3.4.
+https://CRAN.R-project.org/package=kableExtra
+
+Garrett Grolemund, Hadley Wickham (2011). Dates and Times Made Easy
+with lubridate. Journal of Statistical Software, 40(3), 1-25. URL
+https://www.jstatsoft.org/v40/i03/.
+
+Alboukadel Kassambara (2020). ggpubr: 'ggplot2' Based Publication
+Ready Plots. R package version 0.4.0.
+https://CRAN.R-project.org/package=ggpubr
+
+
 
