@@ -84,7 +84,7 @@ min_traps = min(juv_trap_counts_summary$count)
 ```
 #### Analyses:
 
-(((add this)))
+The maximum number of hare trappings in a given year was `r max_traps` and occurred in 1999, while the minimum was zero and occurred in both 2002 and 2009. The mean annual trappings was `r mean_traps` and the median was `r median_traps`. The disparity between these two is due to the huge difference in trappings between 1999 and any other year, thus the 1999 trappings pulled up the mean. There's a slight trend of decreasing hare trappings, however, this depends heavily on the 1999 data point which is a stark outlier. To better understand this trend one would have to account for the annual effort, or number of traps laid and how often. With the given data it is impossible to tell if differences between years are due to changing hare populations or changing effort put in to trapping.
 
 ### Visualize juvenile hare weights
 
@@ -122,7 +122,7 @@ juv_weights_sex_site = juv_bonanza_hares %>%
 ```
 #### Analyses:
 
-(((add this)))
+At all sites male hares weighed on average `r juv_weights_sex_site$mean_weight[4] - juv_weights_sex_site$mean_weight[1]` to `r juv_weights_sex_site$mean_weight[5] - juv_weights_sex_site$mean_weight[2]` grams more than females. Hares at the Bonanaza black spruce site also weighed more on average that at the mature and riparian sites, but there was not a large variation from site to site or by sex.
 
 ### Juvenile weight comparison (male & female snowshoe hares)
 
@@ -162,6 +162,14 @@ ggplot(female_weights, aes(x = weight)) +
 ```
 
 ```{r}
+# percent difference of weights
+p_diff = 200 *
+  (juv_weights_sex$mean_weight[2] - juv_weights_sex$mean_weight[1]) /
+  (juv_weights_sex$mean_weight[2] + juv_weights_sex$mean_weight[1])
+```
+
+
+```{r}
 # build vectors for cohen's d, t-test using "pull"
 m_weights_vec = male_weights %>% # male weights as vector
   pull(weight)
@@ -171,7 +179,7 @@ f_weights_vec = female_weights %>% # female weights as vector
 
 ```{r}
 # cohen's d effect size 
-weights_cohen = cohen.d(m_weights_vec, f_weights_vec)
+weights_cohen = cohen.d(m_weights_vec, f_weights_vec, na.rm = TRUE)
 ```
 
 ```{r}
@@ -181,7 +189,7 @@ weights_t = t.test(m_weights_vec, f_weights_vec)
 
 #### Analyses
 
-(((add analyses)))
+On average, trapped male juvenile hares weighed `r juv_weights_sex$mean_weight[2] - juv_weights_sex$mean_weight[1]` grams, or `r round(p_diff,1)`%, more than trapped female juvenile hares. Examining the effect of hare sex on weight with a t-test, we find that there is less than a 1% chance of randomly drawing samples from populations with the same mean that are at least as different as the male and female hairs were. The effect, however, was small (Cohen's *d* = `r round(weights_cohen$estimate, 2)`).
 
 ### Relationship between juvenile weight & hind foot length
 
@@ -191,7 +199,7 @@ hare_lm = lm(weight ~ hindft, juv_bonanza_hares)
 # glance to acess outputs
 hare_lm_out = glance(hare_lm)
 # summary to view
-summary(hare_lm)
+# summary(hare_lm)
 ```
 
 ```{r}
