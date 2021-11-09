@@ -13,6 +13,8 @@ library(here)
 library(kableExtra)
 library(lubridate)
 library(effsize)
+library(ggpubr)
+library(broom)
 ```
 
 ```{r}
@@ -159,21 +161,67 @@ ggplot(female_weights, aes(x = weight)) +
   geom_histogram(bins = 10)
 ```
 
+```{r}
+# build vectors for cohen's d, t-test using "pull"
+m_weights_vec = male_weights %>% # male weights as vector
+  pull(weight)
+f_weights_vec = female_weights %>% # female weights as vector
+  pull(weight)
+```
+
+```{r}
+# cohen's d effect size 
+weights_cohen = cohen.d(m_weights_vec, f_weights_vec)
+```
+
+```{r}
+# t-test, unpaired, 2 sample
+weights_t = t.test(m_weights_vec, f_weights_vec)
+```
+
 #### Analyses
 
-(((add analyses and Cohens D calculation)))
+(((add analyses)))
 
 ### Relationship between juvenile weight & hind foot length
 
 ```{r}
-ggplot(juv_bonanza_hares, aes(x = hindft, y = weight, color = sex)) +
-  geom_point() + 
-  theme_light() + 
-  labs(x = "Hind foot length [mm]", y = "Weight [g]") + 
-  scale_color_manual(labels = c("Female", "Male", "NA"), values = c("red", "dark blue"))
+# linear model of hare weight as a function of hind foot length
+hare_lm = lm(weight ~ hindft, juv_bonanza_hares)
+# glance to acess outputs
+hare_lm_out = glance(hare_lm)
+# summary to view
+summary(hare_lm)
 ```
 
-Fig 3: Juvenile Hare Weights [g] as a function of hind foot length [mm] at three Bonanza sites hares trapped between 1999 and 2012
+```{r}
+# pearson's r to find correlation between bodymass, hind foot length
+hares_cor = cor.test(juv_bonanza_hares$weight, juv_bonanza_hares$hindft)
+```
+
+```{r}
+# ggplot of hind foot length vs weight
+ggplot(juv_bonanza_hares, aes(x = hindft, y = weight)) +
+  # scatter plot
+  geom_point(color = "blue") + 
+  # add linear regression fitted line
+  geom_smooth(method = "lm",
+              color = "red",
+              size = 0.5,
+              fill = "gray10",
+              alpha = 0.5) +
+  theme_light() + 
+  # add labels
+  labs(x = "Hind foot length [mm]", y = "Weight [g]") +
+  # add equation of line at given position
+  ggpubr::stat_regline_equation(label.x = 70, label.y = 1250)
+```
+
+Fig 3: Juvenile hare weights [g] as a function of hind foot length [mm] at three Bonanza sites, hares trapped between 1999 and 2012 with fitted linear regression
+
+#### Analysis
+
+The fitted linear regression model states that for every 1mm increase in hind foot length, the hares' weight increase by `r round(hare_lm$coefficients[2],1)` grams. The fitted line had an R^2^ = `r round(hare_lm_out[2],2)` meaning only `r 100*round(hare_lm_out[2],2)`% of the variance in weight could be explained by changes in hind foot length. From a Pearson's *r* value of `r round(hares_cor$estimate,2)` we see that the variables (hind foot length and weight) are moderately correlated. The assumption of homoscedasticity, which is required for linear regression, appears to not apply as we can see in the scatter plot that variance in weight increases as hind foot length gets bigger. 
 
 ## Summary
 
